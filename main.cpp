@@ -14,7 +14,7 @@ void deletecols(int**& matrix, int rows, int& cols, int* zerocols, int zerocount
     }
 }
 int counter = 0;
-int* findcolumnswithzero(int** matrix, int rows, int cols) {
+int* findcolswithzero(int** matrix, int rows, int cols) {
     int* arr = (int*)calloc(cols, sizeof(int));
     counter = 0;
     for (int j = 0; j < cols; ++j) {
@@ -87,7 +87,7 @@ void part1() {
     }
     std::cout << "Преобразованная матрица:" << std::endl;
     printmatrix(matrix, newrows, newcols);
-    int* zerocols = findcolumnswithzero(matrix, newrows, newcols);
+    int* zerocols = findcolnswithzero(matrix, newrows, newcols);
     if (zerocols != NULL) {
         deletecols(matrix, newrows, newcols, zerocols, counter);
         free(zerocols);
