@@ -18,7 +18,7 @@ int* findcolswithzero(int** matrix, int rows, int cols) {
     }
     else {
         free(arr);
-        arr = NULL
+        arr = NULL;
     }
     return arr;
 }
