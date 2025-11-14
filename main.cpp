@@ -1,13 +1,26 @@
 //help :(
 #include <iostream>
+void deletecols(int**& matrix, int rows, int& cols, int* zerocols, int zerocount) {
+    for (int k = zerocount - 1; k >= 0; k--) {
+        int colsdelete = zerocols[k];
+        for (int i = 0; i < rows; i++) {
+            for (int j = colsdelete; j < cols - 1; j++) {
+                matrix[i][j] = matrix[i][j + 1];
+            }
+            int* temp = (int*)realloc(matrix[i], (cols - 1) * sizeof(int));
+            matrix[i] = temp;
+        }
+        cols--;
+    }
+}
 int counter = 0;
-int* findcolswithzero(int** matrix, int rows, int cols) {
+int* findcolumnswithzero(int** matrix, int rows, int cols) {
     int* arr = (int*)calloc(cols, sizeof(int));
     counter = 0;
-    for (int i = 0; i < cols; ++i) {
-        for (int j = 0; j < rows; ++j) {
-            if (matrix[j][i] == 0) {
-                arr[counter] = i;
+    for (int j = 0; j < cols; ++j) {
+        for (int i = 0; i < rows; ++i) {
+            if (matrix[i][j] == 0) {
+                arr[counter] = j;
                 ++counter;
                 break;
             }
@@ -35,14 +48,14 @@ void part1() {
     for (int i = 0; i < 2; ++i) {
         matrix[i] = (int*)malloc(2 * sizeof(int));
     }
-    std::cout << "введите матрицу: " << std::endl;
-    std::cout << "введите A: ";
+    std::cout << "Введите матрицу :" << std::endl;
+    std::cout << "A: ";
     std::cin >> matrix[0][0];
-    std::cout << "введите B: ";
+    std::cout << "B: ";
     std::cin >> matrix[0][1];
-    std::cout << "введите C: ";
+    std::cout << "C: ";
     std::cin >> matrix[1][0];
-    std::cout << "введите D: ";
+    std::cout << "D: ";
     std::cin >> matrix[1][1];
     if (matrix[0][0] < 0 || matrix[0][1] < 0) {
         std::cout << "ОШИБКА!" << std::endl;
@@ -69,45 +82,23 @@ void part1() {
     }
     for (int i = 0; i < newrows; ++i) {
         for (int j = 0; j < newcols; ++j) {
-            if (i >= 2 || j >= 2) {
-                matrix[i][j] = (i - 1) * C + (j - 1) * D;
-            }
+            matrix[i][j] = (i - 1) * C + (j - 1) * D;
         }
     }
-    std::cout << "преобразованная матрица:" << std::endl;
+    std::cout << "Преобразованная матрица:" << std::endl;
     printmatrix(matrix, newrows, newcols);
-    int* zerocolumns = findcolswithzero(matrix, newrows, newcols);
-    if (counter > 0) {
-        std::cout << "Матрица после удаления столбиков с нулями:" << std::endl;
-        for (int i = 0; i < newrows; ++i) {
-            for (int j = 0; j < newcols; ++j) {
-                bool skip = false;
-                for (int k = 0; k < counter; ++k) {
-                    if (j == zerocolumns[k]) {
-                        skip = true;
-                        break;
-                    }
-                }
-                if (!skip) {
-                    std::cout << matrix[i][j] << " ";
-                }
-            }
-            std::cout << std::endl;
-        }
-    }
-    else {
-        std::cout << "Нет столбиков с нулями:" << std::endl;
+    int* zerocols = findcolumnswithzero(matrix, newrows, newcols);
+    if (zerocols != NULL) {
+        deletecols(matrix, newrows, newcols, zerocols, counter);
+        free(zerocols);
+        std::cout << "Матрица после удаления столбиков:" << std::endl;
         printmatrix(matrix, newrows, newcols);
-    }
-    if (zerocolumns != NULL) {
-        free(zerocolumns);
-    }
+    } 
     for (int i = 0; i < newrows; ++i) {
         free(matrix[i]);
     }
     free(matrix);
 }
-
 void part2() {
     double a, b;
     std::cout << "введите числа a и b: ";
