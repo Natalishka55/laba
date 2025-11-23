@@ -1,5 +1,6 @@
 //help :(
 #include <iostream>
+#include <cstdlib>
 void deletecols(int**& matrix, int rows, int& cols, int* zerocols, int zerocount) {
     for (int k = zerocount - 1; k >= 0; k--) {
         int colsdelete = zerocols[k];
@@ -87,7 +88,7 @@ void part1() {
     }
     std::cout << "Преобразованная матрица:" << std::endl;
     printmatrix(matrix, newrows, newcols);
-    int* zerocols = findcolnswithzero(matrix, newrows, newcols);
+    int* zerocols = findcolswithzero(matrix, newrows, newcols);
     if (zerocols != NULL) {
         deletecols(matrix, newrows, newcols, zerocols, counter);
         free(zerocols);
